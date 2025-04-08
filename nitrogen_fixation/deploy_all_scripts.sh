@@ -13,15 +13,17 @@ DB_SRC="/grphome/grp_lichenscapstone/combined_db_uniprot"
 DB_PREFIX="combined_db"
 CHUNK_SCRIPT_SRC="/grphome/grp_lichenscapstone/chunkSmallBatch.slurm"
 
-# 1. Clone your fork if not already present
+# 1. Clone your fork into your home directory if not present
 if [ ! -d "$REPO_DIR" ]; then
   cd "$HOME"
-  git clone git@github.com:rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git
-  # Ensure remote uses SSH URL
-git -C "$HOME/pipeline-rhizoplaca-robusta" remote set-url origin git@github.com:rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git
+  git clone git@github.com:rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git "$REPO_DIR"
 fi
 
-# 2. Create destination directory inside your repo
+# Ensure remote uses SSH URL
+cd "$REPO_DIR"
+git remote set-url origin git@github.com:rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git
+
+# 2. Create destination directory inside your repo Create destination directory inside your repo
 mkdir -p "$DEST_DIR"
 
 # 3. Copy specific workflow scripts into the destination
