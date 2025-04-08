@@ -15,16 +15,16 @@
 export OMP_NUM_THREADS=$SLURM_CPUS_ON_NODE
 
 # LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
-module load gcc/12 openmpi/4.1
+module load gcc/12
 
-GRP_DIR="/home/kylemf/groups/grp_lichenscapstone"
-IN_PATH="$GRP_DIR/genedata/rhizoplaca_robusta_short_reads"
-OUT_FOL="test-5"
-OUT_PATH="$GRP_DIR/spades-results/$OUT_FOL"
+GRP_DIR="../../"
+IN_PATH="$GRP_DIR/raw_read_fasta/"
+#OUT_FOL="run-1"
+OUT_PATH="$GRP_DIR/spades-results/" #$OUT_FOL"
 mkdir $OUT_PATH
-INPUT_SUFFIX=".fastq.gz"
+INPUT_SUFFIX=".fasta"
 
-for read in "$IN_PATH/"*.fastq.gz
+for read in "$IN_PATH/"*.fasta
 do 
     f_name="$(basename $read)"
     p_name="$(basename $read $INPUT_SUFFIX)"

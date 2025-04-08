@@ -17,11 +17,11 @@ export OMP_NUM_THREADS=$SLURM_CPUS_ON_NODE
 # LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
 grep -qxF '[[ -f ~/.bashrc ]] && . ~/.bashrc' ~/.bash_profile || echo '[[ -f ~/.bashrc ]] && . ~/.bashrc' >> ~/.bash_profile
 source ~/.bash_profile
-module load miniconda3 gcc/12 openmpi/4.1
+module load miniconda3 gcc/12
 conda init
 conda activate quast_env
 
-GRP_DIR="/home/kylemf/groups/grp_lichenscapstone"
+GRP_DIR="../../"
 IN_PATH="$GRP_DIR/spades-results/test-4"
 NCBI_PATH="/apps/blast/databases/nr"  #-db ../../apps/blast/databases/nr
 REF_FILE_SUFFIX=".fasta"
