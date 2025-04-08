@@ -17,10 +17,10 @@ export OMP_NUM_THREADS=$SLURM_CPUS_ON_NODE
 # LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
 module load gcc/12
 
-GRP_DIR="../../"
-IN_PATH="$GRP_DIR/raw_read_fasta/"
+GRP_DIR="../.."
+IN_PATH="$GRP_DIR/raw_read_fasta"
 #OUT_FOL="run-1"
-OUT_PATH="$GRP_DIR/spades-results/" #$OUT_FOL"
+OUT_PATH="$GRP_DIR/spades-results" #$OUT_FOL"
 mkdir $OUT_PATH
 INPUT_SUFFIX=".fasta"
 

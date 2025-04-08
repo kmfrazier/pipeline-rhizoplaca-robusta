@@ -22,14 +22,11 @@ conda init
 conda activate quast_env
 
 GRP_DIR="../../"
-IN_PATH="$GRP_DIR/spades-results/test-4"
+IN_PATH="$GRP_DIR/spades-results"
 NCBI_PATH="/apps/blast/databases/nr"  #-db ../../apps/blast/databases/nr
-REF_FILE_SUFFIX=".fasta"
-REF_FOLDER_SUFFIX=".1"
-REF_PATH="$GRP_DIR/ncbi_dataset/data"
-OUT_FOL="test-6"
-OUT_PATH="$GRP_DIR/metaquast-results/$OUT_FOL"
-EXECUTABLE="/home/kylemf/.conda/envs/quast_env/bin/metaquast.py"
+#OUT_FOL="test-6"
+OUT_PATH="$GRP_DIR/metaquast-results/" #$OUT_FOL"
+EXECUTABLE="/~/$USER/.conda/envs/quast_env/bin/metaquast.py"
 mkdir $OUT_PATH
 
 declare -a input_files
