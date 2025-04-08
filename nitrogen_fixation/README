@@ -11,7 +11,7 @@ Directory Structure
     ├── process_blastx.py              (Optional) Summarize BLASTX results
     ├── graph.py                       Generate bar graph of hits per organism
     ├── chunkSmallBatch.slurm          SLURM array script for chunked BLASTX
-    ├── database/                      Pre-built BLAST database files from UNIPROT
+    ├── database/                      Pre-built BLAST database files
     │   ├── combined_db.fasta
     │   ├── combined_db.phr
     │   ├── combined_db.pin
@@ -34,23 +34,27 @@ Ensure the following tools are installed and available in your PATH:
 - Python 3.9+ with packages: biopython, pandas, matplotlib
 - SLURM (for chunkSmallBatch.slurm)
 
-1. Environment Setup
+1. Setup Script (Chunk Preparation)
 
-Run the setup script to create and activate a Conda environment named blastx_env:
+The `setup.sh` script prepares directories and splits your combined query FASTA into chunks for SLURM processing. It does **not** configure a Conda environment or install software. You must ensure the following tools are already installed and in your `PATH` before running:
+
+- seqkit
+- BLAST+(`makeblastdb`, `blastx`)
+
+By default, `setup.sh` defines:
+
+- `FASTA_DIR`: Directory containing your combined query FASTA files.
+- `CHUNK_DIR`: Directory where split FASTA chunks will be saved.
+- `DB_DIR`: Directory containing the pre-built BLAST database.
+- `RESULTS_DIR`: Directory where BLASTX output files will be written.
+
+To run the script:
 
     bash setup.sh
 
-This installs:
-- Python 3.9
-- BLAST+ tools
-- seqkit
-- Biopython
-- Pandas
-- Matplotlib
+This creates the `CHUNK_DIR` and `RESULTS_DIR`, and splits `FASTA_DIR/*.fasta` into smaller FASTA files for parallel processing.
 
-If you modify the environment name or package versions, update setup.sh accordingly.
-
-2. Rebuild the BLAST Database
+2. Rebuild the BLAST Database Rebuild the BLAST Database Rebuild the BLAST Database Rebuild the BLAST Database
 
 If you need to rebuild the protein BLAST database from FASTA files in the database folder:
 
