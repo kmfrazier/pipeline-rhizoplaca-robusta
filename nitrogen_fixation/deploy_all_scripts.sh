@@ -16,7 +16,9 @@ CHUNK_SCRIPT_SRC="/grphome/grp_lichenscapstone/chunkSmallBatch.slurm"
 # 1. Clone your fork if not already present
 if [ ! -d "$REPO_DIR" ]; then
   cd "$HOME"
-  git clone https://github.com/rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git
+  git clone git@github.com:rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git
+  # Ensure remote uses SSH URL
+git -C "$HOME/pipeline-rhizoplaca-robusta" remote set-url origin git@github.com:rachel-hunter-smhs/pipeline-rhizoplaca-robusta.git
 fi
 
 # 2. Create destination directory inside your repo
