@@ -1,0 +1,122 @@
+Nitrogen Fixation Workflow
+
+This directory contains all scripts, data, and instructions for performing a BLASTX-based analysis of nitrogen fixation genes in the lichen Rhizoplaca robusta. Follow these steps to reproduce the workflow.
+
+Directory Structure
+
+    nitrogen_fixation/
+    ├── setup.sh                       Environment setup script
+    ├── 01_makeblastdb.sh              (Optional) Build BLAST DB from FASTA
+    ├── organismInfo.py                Annotate BLASTX outputs with organism names
+    ├── process_blastx.py              (Optional) Summarize BLASTX results
+    ├── graph.py                       Generate bar graph of hits per organism
+    ├── chunkSmallBatch.slurm          SLURM array script for chunked BLASTX
+    ├── database/                      Pre-built BLAST database files from UNIPROT
+    │   ├── combined_db.fasta
+    │   ├── combined_db.phr
+    │   ├── combined_db.pin
+    │   ├── combined_db.psq
+    │   └── ...
+    ├── raw_blastx_outputs/            Original BLASTX output files (*_blastx.txt)
+    ├── annotated_blastx_results.csv   CSV with organism annotations
+    ├── figures/                       Generated figures
+    │   ├── blastx_hits_per_organism.png
+    │   └── blastx_summary_graph.png
+    └── README.md                      This documentation
+
+Prerequisites
+
+Ensure the following tools are installed and available in your PATH:
+
+- Conda or Miniconda
+- BLAST+ suite (makeblastdb, blastx)
+- seqkit (for FASTA manipulation)
+- Python 3.9+ with packages: biopython, pandas, matplotlib
+- SLURM (for chunkSmallBatch.slurm)
+
+1. Environment Setup
+
+Run the setup script to create and activate a Conda environment named blastx_env:
+
+    bash setup.sh
+
+This installs:
+- Python 3.9
+- BLAST+ tools
+- seqkit
+- Biopython
+- Pandas
+- Matplotlib
+
+If you modify the environment name or package versions, update setup.sh accordingly.
+
+2. Rebuild the BLAST Database
+
+If you need to rebuild the protein BLAST database from FASTA files in the database folder:
+
+    cd database
+    makeblastdb -in combined_db.fasta -dbtype prot -out combined_db
+
+This generates the .phr, .pin, and .psq files.
+
+3. Annotate BLASTX Outputs
+
+Place your BLASTX output files (*_blastx.txt) into raw_blastx_outputs/. Then run:
+
+    python organismInfo.py \
+      --fasta-dir database \
+      --blast-dir raw_blastx_outputs \
+      --output annotated_blastx_results.csv
+
+This script:
+1. Parses database/*.fasta headers to map sequence IDs → organism names
+2. Reads each BLASTX output line (tabular format)
+3. Appends an Organism column and writes to annotated_blastx_results.csv
+
+4. Generate Hits-per-Organism Bar Graph
+
+Use the annotated CSV to create a bar chart:
+
+    python graph.py \
+      --input annotated_blastx_results.csv \
+      --output figures/blastx_hits_per_organism.png
+
+- Bars are colored sky blue with black edges
+- Legend indicates Hit Count
+- A detailed caption is embedded below the chart
+
+5. Optional Summary Scatter Plot
+
+If you have process_blastx.py and 04_generate_summary_graph.py, run:
+
+    python process_blastx.py --input annotated_blastx_results.csv --output summary.csv
+    python 04_generate_summary_graph.py --input summary.csv --output figures/blastx_summary_graph.png
+
+This generates a scatter plot of query metrics (e.g., hit count vs. bitscore).
+
+6. Run Chunked BLASTX on SLURM
+
+For large query FASTA files, use the SLURM array script:
+
+    sbatch chunkSmallBatch.slurm
+
+- Splits database/combined_queries.fasta into chunks of 1000 sequences
+- Runs blastx on each chunk in parallel
+- Adjust #SBATCH --array=0-99 for the number of chunks
+
+Customization
+
+- Paths: All scripts assume they are run from the nitrogen_fixation/ directory. If you run them elsewhere, update paths at the top of each script.
+- Parameters: Modify graph.py and chunkSmallBatch.slurm to change bitscore cutoffs or SLURM resource requests.
+- Dependencies: Adjust setup.sh if you need different versions or additional packages.
+
+Contributing
+
+1. Fork the repository on GitHub
+2. Create a branch: git checkout -b feature-name
+3. Make your changes and commit: git commit -m "Add new feature"
+4. Push: git push origin feature-name
+5. Open a Pull Request against main
+
+This workflow is fully reproducible and documented for collaborative development.
+
